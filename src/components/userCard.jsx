@@ -1,7 +1,13 @@
 import { useDispatch } from "react-redux";
+import CardImage from "../assets/picture2.png";
 
 import { updateFollowers } from "../redux/operation";
-import { UserFons, UserPFollowers, UserPTweets } from "./userCard.styled";
+import {
+  CardLogo,
+  UserFons,
+  UserPFollowers,
+  UserPTweets,
+} from "./userCard.styled";
 // import ButtonFollow from "./buttonFollow/buttonFollow";
 // import ButtonFollowing from "./buttonFollowing/buttonFollowing";
 
@@ -43,9 +49,9 @@ export default function UserCard(user) {
 
   return (
     <>
-      <UserFons src="./picture2.png" alt="ddd" height="50px" />
-      <img src=".../assets/rectangle.png" alt="ddd" height="2px" />
+      <UserFons src={CardImage} alt="ddd" height="50px" />
       <img src={user.user.avatar} alt="user" height="50px" />
+      <CardLogo />
       <UserPTweets> {user.user.tweets} TWEETS</UserPTweets>
       <UserPFollowers> {user.user.followers} FOLLOWERS</UserPFollowers>
 
