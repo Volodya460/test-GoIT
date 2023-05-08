@@ -7,9 +7,12 @@ export const userSlice = createSlice({
   initialState: {
     items: [],
     isLoading: false,
+    isLoadingUpdate: false,
     error: null,
     firstLoading: false,
     showButton: false,
+    filterValue: "",
+    usersFollower: [],
   },
 
   extraReducers: (builder) => {
@@ -33,10 +36,10 @@ export const userSlice = createSlice({
       })
 
       .addCase(updateFollowers.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadingUpdate = true;
       })
       .addCase(updateFollowers.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingUpdate = false;
         state.error = null;
 
         const { id, followers } = action.payload;
@@ -44,10 +47,16 @@ export const userSlice = createSlice({
         if (userIndex !== -1) {
           state.items[userIndex].followers = followers;
         }
+        const userIndex2 = state.usersFollower.findIndex(
+          (user) => user.id === id
+        );
+        if (userIndex2 !== -1) {
+          state.usersFollower[userIndex].followers = followers;
+        }
       })
 
       .addCase(updateFollowers.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingUpdate = false;
         state.error = action.payload;
       });
   },
@@ -55,12 +64,30 @@ export const userSlice = createSlice({
     buttunMore: (state) => {
       state.firstLoading = false;
     },
+    changeFilter: (state, action) => {
+      console.log(action.payload);
+      state.filterValue = action.payload;
+    },
+    changeUserFollower: (state, action) => {
+      state.usersFollower = action.payload;
+    },
+    changeShowButton: (state, action) => {
+      state.showButton = action.payload;
+    },
   },
 });
 
-export const { buttunMore } = userSlice.actions;
+export const {
+  buttunMore,
+  changeFilter,
+  changeUserFollower,
+  changeShowButton,
+} = userSlice.actions;
 
 export const getUserInf = (state) => state.user.items;
 export const getFierstLoading = (state) => state.user.firstLoading;
 export const getshowButton = (state) => state.user.showButton;
 export const getIsLoading = (state) => state.user.isLoading;
+export const getError = (state) => state.user.error;
+export const getFilterValue = (state) => state.user.filterValue;
+export const getUsersFollower = (state) => state.user.usersFollower;

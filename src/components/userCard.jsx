@@ -23,30 +23,30 @@ export default function UserCard(user) {
   const dispatch = useDispatch();
 
   const addFollower = () => {
-    let arrayUserFollowers = Number(id);
+    let arrayUserFollowers = { id, followers, avatar, tweets };
     idArrayPars.push(arrayUserFollowers);
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(idArrayPars));
     dispatch(updateFollowers([id, Number(followers) + 1]));
+
     toast.info("Follow ");
   };
 
   const deleteFollower = () => {
-    dispatch(updateFollowers([id, Number(followers) - 1]));
-
     idArrayPars.map((el) => {
-      if (Number(id) === el) {
+      if (Number(id) === Number(el.id)) {
         const index = idArrayPars.map((el) => el).indexOf(el);
         idArrayPars.splice(index, 1);
 
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(idArrayPars));
       }
     });
+    dispatch(updateFollowers([id, Number(followers) - 1]));
     toast.info("Don't follow ");
   };
 
   const chooseButton = () => {
     for (let i = 0; i < idArrayPars.length; i++) {
-      if (idArrayPars[i] === Number(id)) {
+      if (Number(idArrayPars[i].id) === Number(id)) {
         return true;
       }
     }
@@ -65,16 +65,16 @@ export default function UserCard(user) {
       </TopBox>
       <BottomBox>
         <p> {tweets} TWEETS</p>
-        <p> {followers} FOLLOWERS</p>
-        {chooseButton() === true ? (
-          <button type="button" onClick={() => deleteFollower()}>
+        <p> {followers.toLocaleString("en-US")} FOLLOWERS</p>
+        {chooseButton() === false ? (
+          <button type="button" onClick={() => addFollower()}>
             FOLLOW
           </button>
         ) : (
           <button
             type="button"
             style={{ background: "#5CD3A8" }}
-            onClick={() => addFollower()}
+            onClick={() => deleteFollower()}
           >
             FOLLOWING
           </button>
