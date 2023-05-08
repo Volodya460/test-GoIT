@@ -2,20 +2,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-// import { fetchUsers } from "./redux/operation";
 import UserCard from "../components/userCard";
-import { UserLi } from "../components/userCard.styled";
-import { UserUl } from "../App,styled";
-import { buttunMore, getFierstLoading, getUserInf } from "../redux/userSlice";
+
+import {
+  buttunMore,
+  getFierstLoading,
+  getUserInf,
+  getshowButton,
+} from "../redux/userSlice";
 import { fetchUsers } from "../redux/operation";
+import { ButtonBack, ButtonLoadMore, UserLi, UserUl } from "./pageUser.styled";
 
 export default function PageUser() {
   const [page, setPage] = useState(1);
   const state = useSelector(getUserInf);
+  const buttonShow = useSelector(getshowButton);
+
   const location = useLocation();
   const navigate = useNavigate();
   const firstLoading = useSelector(getFierstLoading);
-  console.log(firstLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,14 +36,14 @@ export default function PageUser() {
 
   return (
     <>
-      <button
+      <ButtonBack
         type="button"
         onClick={() => {
           navigate(location?.state?.from ?? "/");
         }}
       >
         Go back
-      </button>
+      </ButtonBack>
       <UserUl>
         {state?.map((el) => {
           return (
@@ -48,10 +53,11 @@ export default function PageUser() {
           );
         })}
       </UserUl>
-
-      <button type="button" onClick={() => loadMore()}>
-        Load More
-      </button>
+      {!buttonShow && (
+        <ButtonLoadMore type="button" onClick={() => loadMore()}>
+          Load More
+        </ButtonLoadMore>
+      )}
     </>
   );
 }

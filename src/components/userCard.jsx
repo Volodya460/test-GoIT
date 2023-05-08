@@ -1,46 +1,52 @@
 import { useDispatch } from "react-redux";
 import CardImage from "../assets/picture2.png";
+import { ToastContainer, toast } from "react-toastify";
+import PropTypes from "prop-types";
+import "react-toastify/dist/ReactToastify.css";
 
 import { updateFollowers } from "../redux/operation";
 import {
   CardLogo,
+  ImgBox,
   UserFons,
-  UserPFollowers,
-  UserPTweets,
+  BottomBox,
+  TopBox,
 } from "./userCard.styled";
-// import ButtonFollow from "./buttonFollow/buttonFollow";
-// import ButtonFollowing from "./buttonFollowing/buttonFollowing";
 
 const LOCALSTORAGE_KEY = "ID-SAVE-USERFOLLOWERS";
 let idArray = localStorage.getItem("ID-SAVE-USERFOLLOWERS");
 let idArrayPars = JSON.parse(idArray) || [];
 
 export default function UserCard(user) {
+  const { id, followers, avatar, tweets } = user.user;
+
   const dispatch = useDispatch();
 
   const addFollower = () => {
-    let arrayUserFollowers = Number(user.user.id);
+    let arrayUserFollowers = Number(id);
     idArrayPars.push(arrayUserFollowers);
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(idArrayPars));
-    dispatch(updateFollowers([user.user.id, Number(user.user.followers) + 1]));
+    dispatch(updateFollowers([id, Number(followers) + 1]));
+    toast.info("Follow ");
   };
 
   const deleteFollower = () => {
-    dispatch(updateFollowers([user.user.id, Number(user.user.followers) - 1]));
+    dispatch(updateFollowers([id, Number(followers) - 1]));
 
     idArrayPars.map((el) => {
-      if (Number(user.user.id) === el) {
+      if (Number(id) === el) {
         const index = idArrayPars.map((el) => el).indexOf(el);
         idArrayPars.splice(index, 1);
 
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(idArrayPars));
       }
     });
+    toast.info("Don't follow ");
   };
 
   const chooseButton = () => {
     for (let i = 0; i < idArrayPars.length; i++) {
-      if (idArrayPars[i] === Number(user.user.id)) {
+      if (idArrayPars[i] === Number(id)) {
         return true;
       }
     }
@@ -49,42 +55,36 @@ export default function UserCard(user) {
 
   return (
     <>
-      <UserFons src={CardImage} alt="ddd" height="50px" />
-      <img src={user.user.avatar} alt="user" height="50px" />
-      <CardLogo />
-      <UserPTweets> {user.user.tweets} TWEETS</UserPTweets>
-      <UserPFollowers> {user.user.followers} FOLLOWERS</UserPFollowers>
+      <TopBox>
+        <UserFons src={CardImage} alt="ddd" height="50px" />
+        <ImgBox>
+          <img src={avatar} alt="user" height="50px" />
+        </ImgBox>
 
-      {chooseButton() === true ? (
-        // <ButtonFollow
-        //   userId={user.user.id}
-        //   userFolloewrs={user.user.followers}
-        //   changeBullBautoon={changeBullBautoon()}
-        //   // addFollower={addFollower}
-        // />
-        <button type="button" onClick={() => deleteFollower()}>
-          FOLLOW
-        </button>
-      ) : (
-        // <button type="button" onClick={() => deleteFollower()}>
-        //   FOLLOW
-        // </button>
-        // <ButtonFollow
-        //   userId={user.user.id}
-        //   userFolloewrs={user.user.followers}
-        //   addFollower={addFollower}
-        // />
-
-        // <ButtonFollowing
-        //   userId={user.user.id}
-        //   userFolloewrs={user.user.followers}
-        //   changeBullBautoon={changeBullBautoon()}
-        //   // deleteFollower={deleteFollower}
-        // />
-        <button type="button" onClick={() => addFollower()}>
-          FOLLOWING
-        </button>
-      )}
+        <CardLogo />
+      </TopBox>
+      <BottomBox>
+        <p> {tweets} TWEETS</p>
+        <p> {followers} FOLLOWERS</p>
+        {chooseButton() === true ? (
+          <button type="button" onClick={() => deleteFollower()}>
+            FOLLOW
+          </button>
+        ) : (
+          <button
+            type="button"
+            style={{ background: "#5CD3A8" }}
+            onClick={() => addFollower()}
+          >
+            FOLLOWING
+          </button>
+        )}
+      </BottomBox>
+      <ToastContainer />
     </>
   );
 }
+
+UserCard.propTypes = {
+  user: PropTypes.object.isRequired,
+};

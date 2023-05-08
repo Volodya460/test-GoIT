@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUsers } from "./operation";
 import { updateFollowers } from "./operation";
+import { toast } from "react-toastify";
 export const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -8,6 +9,7 @@ export const userSlice = createSlice({
     isLoading: false,
     error: null,
     firstLoading: false,
+    showButton: false,
   },
 
   extraReducers: (builder) => {
@@ -20,6 +22,10 @@ export const userSlice = createSlice({
         state.error = null;
         state.firstLoading = true;
         state.items = state.items.concat(action.payload);
+        if (action.payload.length < 3) {
+          toast.info("This is the end");
+          state.showButton = true;
+        }
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.isLoading = false;
@@ -56,3 +62,5 @@ export const { buttunMore } = userSlice.actions;
 
 export const getUserInf = (state) => state.user.items;
 export const getFierstLoading = (state) => state.user.firstLoading;
+export const getshowButton = (state) => state.user.showButton;
+export const getIsLoading = (state) => state.user.isLoading;

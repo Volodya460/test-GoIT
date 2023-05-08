@@ -27,6 +27,7 @@ const StyledLink = styled(NavLink)`
   border-radius: 20px;
   text-decoration: none;
   color: black;
+  font-family: Bradley Hand, cursive;
   font-weight: 300;
   &.hover {
     color: white;

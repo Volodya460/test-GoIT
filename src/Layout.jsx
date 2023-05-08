@@ -8,7 +8,7 @@ const Layout = () => {
     <Container>
       <Header>
         <div>
-          <StyledLink to="/tweets">PageUser </StyledLink>
+          <StyledLink to="/tweets">Tweets </StyledLink>
         </div>
       </Header>
 
