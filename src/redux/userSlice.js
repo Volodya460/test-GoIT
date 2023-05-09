@@ -65,7 +65,6 @@ export const userSlice = createSlice({
       state.firstLoading = false;
     },
     changeFilter: (state, action) => {
-      console.log(action.payload);
       state.filterValue = action.payload;
     },
     changeUserFollower: (state, action) => {

@@ -15,9 +15,7 @@ export default function DropnDown() {
     if (e.target.value === "Follow") {
       dispatch(changeShowButton(true));
     }
-    if (e.target.value === "") {
-      dispatch(changeShowButton(false));
-    }
+
 
     dispatch(changeFilter(e.target.value));
   };
